@@ -62,9 +62,9 @@ export const HistoryList = styled.div`
 `
 
 const statusColors = {
-  Progress: 'green-500',
-  Interrupted: 'yellow-500',
-  Finished: 'red-500',
+  green: 'green-500',
+  yellow: 'yellow-500',
+  red: 'red-500',
 } as const
 
 interface StatusProps {

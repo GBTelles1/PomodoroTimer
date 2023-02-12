@@ -3,28 +3,28 @@ import { HistoryContainer, HistoryList, Status } from './styles'
 import { CyclesContext } from '../../contexts/CyclesContext'
 import { formatDistanceToNow } from 'date-fns'
 
-interface Cycle {
-  id: string
-  task: string
-  minutesAmount: number
-  isActive: boolean
-  startDate: Date
-  interruptedDate?: Date
-  finishedDate?: Date
-}
+// interface Cycle {
+//   id: string
+//   task: string
+//   minutesAmount: number
+//   isActive: boolean
+//   startDate: Date
+//   interruptedDate?: Date
+//   finishedDate?: Date
+// }
 
 export function History() {
   const { cycles } = useContext(CyclesContext)
 
-  function cycleStatus(cycle: Cycle) {
-    if (cycle.finishedDate) {
-      return 'Finished'
-    } else if (cycle.interruptedDate) {
-      return 'Interrupted'
-    } else {
-      return 'Progress'
-    }
-  }
+  // function cycleStatus(cycle: Cycle) {
+  //   if (cycle.finishedDate) {
+  //     return 'Finished'
+  //   } else if (cycle.interruptedDate) {
+  //     return 'Interrupted'
+  //   } else {
+  //     return 'Progress'
+  //   }
+  // }
 
   return (
     <HistoryContainer>
@@ -43,7 +43,7 @@ export function History() {
           <tbody>
             {cycles.map((cycle) => {
               const publishedDateRelativeToNow = formatDistanceToNow(
-                cycle.startDate,
+                new Date(cycle.startDate),
                 {
                   addSuffix: true,
                 },
@@ -54,9 +54,20 @@ export function History() {
                   <td>{cycle.minutesAmount} minutes</td>
                   <td>{publishedDateRelativeToNow}</td>
                   <td>
-                    <Status statusColor={cycleStatus(cycle)}>
+                    {cycle.finishedDate && (
+                      <Status statusColor="green">Finished</Status>
+                    )}
+
+                    {cycle.interruptedDate && (
+                      <Status statusColor="red">Interrupted</Status>
+                    )}
+
+                    {!cycle.finishedDate && !cycle.interruptedDate && (
+                      <Status statusColor="yellow">In Progress</Status>
+                    )}
+                    {/* <Status statusColor={cycleStatus(cycle)}>
                       {cycleStatus(cycle)}
-                    </Status>
+                    </Status> */}
                   </td>
                 </tr>
               )
