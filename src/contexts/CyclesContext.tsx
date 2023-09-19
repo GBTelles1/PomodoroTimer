@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { Cycle, cyclesReducer } from '../reducers/cycles/reducer'
+import { Cycle, CyclesState, cyclesReducer } from '../reducers/cycles/reducer'
 import {
   ActionTypes,
   createNewCycleAction,
@@ -37,15 +37,17 @@ interface CyclesContextProviderProps {
   children: ReactNode
 }
 
+const initialState: CyclesState = {
+  cycles: [],
+  activeCycleId: null,
+}
+
 export function CyclesContextProvider({
   children,
 }: CyclesContextProviderProps) {
   const [cyclesState, dispatch] = useReducer(
     cyclesReducer,
-    {
-      cycles: [],
-      activeCycleId: null,
-    },
+    initialState,
     () => {
       const storedStateAsJSON = localStorage.getItem(
         '@pomodoro-timer:cycles-state-1.0.0',
@@ -54,6 +56,8 @@ export function CyclesContextProvider({
       if (storedStateAsJSON) {
         return JSON.parse(storedStateAsJSON)
       }
+
+      return initialState
     },
   )
 
